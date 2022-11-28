@@ -27,7 +27,13 @@
           packages = with pkgs; [
             cmake
             cmakeCurses
+            gdb
+            libxml2.dev
           ];
+
+          shellHook = ''
+            export CMAKE_INCLUDE_PATH=${pkgs.libxml2.dev}/include/libxml2:$CMAKE_INCLUDE_PATH
+          '';
         };
       });
 }

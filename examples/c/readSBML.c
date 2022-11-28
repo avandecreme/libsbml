@@ -41,7 +41,8 @@
 #include <stdio.h>
 
 #include <sbml/SBMLTypes.h>
-#include "util.h"
+#include <sbml/conversion/ConversionProperties.h>
+// #include "util.h"
 
 
 int
@@ -56,7 +57,7 @@ main (int argc, char *argv[])
 #endif
   unsigned int       errors;
 
-  SBMLDocument_t *d;
+  SBMLDocument_t *doc;
 
 
   if (argc != 2)
@@ -68,23 +69,40 @@ main (int argc, char *argv[])
 
   filename = argv[1];
 
-  start = getCurrentMillis();
-  d     = readSBML(filename);
-  stop  = getCurrentMillis();
+  // start = getCurrentMillis();
+  doc     = readSBML(filename);
+  // stop  = getCurrentMillis();
 
-  errors = SBMLDocument_getNumErrors(d);
-  size   = getFileSize(filename);
+  errors = SBMLDocument_getNumErrors(doc);
+  // size   = getFileSize(filename);
 
   printf( "\n" );
   printf( "        filename: %s\n" , filename     );
-  printf( "       file size: %llu\n", size         );
-  printf( "  read time (ms): %llu\n", stop - start );
+  // printf( "       file size: %llu\n", size         );
+  // printf( "  read time (ms): %llu\n", stop - start );
   printf( "        error(s): %u\n" , errors       );
 
-  if (errors > 0) SBMLDocument_printErrors(d, stdout);
+  if (errors > 0) SBMLDocument_printErrors(doc, stdout);
   printf("\n");
 
-  SBMLDocument_free(d);
+  ConversionProperties_t* props;
+  ConversionOption_t* option;
+
+  props = ConversionProperties_create();
+  option = ConversionOption_create("inferUnits");
+  ConversionProperties_addOption(props, option);
+  unsigned int err = SBMLDocument_convert(doc, props);
+
+  printf("Got conversion error code: %i\n", err);
+
+  Model_t *m = SBMLDocument_getModel(doc);
+  for (unsigned int i = 0; i < Model_getNumParameters(m); i++) {
+    Parameter_t *p = Model_getParameter(m, i);
+    printf("Param %i has unit %s", i, Parameter_getUnits(p));
+  }
+
+  SBMLDocument_free(doc);
   return errors;
 }
+
 

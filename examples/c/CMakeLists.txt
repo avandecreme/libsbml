@@ -40,31 +40,31 @@ endif(EXTRA_INCLUDE_DIRS)
 
 foreach(example 
 
-	addCVTerms
-	addingEvidenceCodes_1
-	addingEvidenceCodes_2
-	addModelHistory
-	appendAnnotation
-	convertSBML
-	createExampleSBML
-	drawMath
-	echoSBML
-	evaluateMath
-	printAnnotation
-	printMath
-	printNotes
-	printRegisteredPackages
-	printSBML
-	printSupported
-	printUnits
-	promoteParameters
+#	addCVTerms
+#	addingEvidenceCodes_1
+#	addingEvidenceCodes_2
+#	addModelHistory
+#	appendAnnotation
+#	convertSBML
+#	createExampleSBML
+#	drawMath
+#	echoSBML
+#	evaluateMath
+#	printAnnotation
+#	printMath
+#	printNotes
+#	printRegisteredPackages
+#	printSBML
+#	printSupported
+#	printUnits
+#	promoteParameters
 	readSBML
-	stripPackage
-	translateMath
-	translateL3Math
-	unsetAnnotation
-	unsetNotes
-	validateSBML
+#	stripPackage
+#	translateMath
+#	translateL3Math
+#	unsetAnnotation
+#	unsetNotes
+#	validateSBML
 
 )
 	add_executable(example_c_${example} ${example}.c util.c)

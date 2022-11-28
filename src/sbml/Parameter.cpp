@@ -1746,13 +1746,18 @@ Parameter::inferUnitsFromKineticLaw(KineticLaw* kl,
         
   if (index > -1 && uff->variableCanBeDeterminedFromMath(math, id) == true)
   {
-    FormulaUnitsData * fud = 
-                       m->getFormulaUnitsData("subs_per_time", SBML_UNKNOWN);
-        
-    if (uff->possibleToUseUnitsData(fud) == true)
+    derivedUD = uff->getUnitDefinitionFromMath(math, true, index);
+
+    if (derivedUD == NULL)
     {
-      derivedUD = uff->inferUnitDefinition(fud->getUnitDefinition(),
-            math, id, true, index);
+      FormulaUnitsData * fud = 
+                        m->getFormulaUnitsData("subs_per_time", SBML_UNKNOWN);
+          
+      if (uff->possibleToUseUnitsData(fud) == true)
+      {
+        derivedUD = uff->inferUnitDefinition(fud->getUnitDefinition(),
+              math, id, true, index);
+      }
     }
   }
 

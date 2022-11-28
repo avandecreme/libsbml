@@ -33,7 +33,7 @@
 if(WITH_EXAMPLES)
 
 add_subdirectory(c)
-add_subdirectory(c++)
+# add_subdirectory(c++)
 
 if(WITH_CSHARP)
   add_subdirectory(csharp)

@@ -5,6 +5,29 @@
     substanceUnits="mole" timeUnits="second"
     extentUnits="mole">
  
+      <listOfFunctionDefinitions>
+        <functionDefinition id="function_1" metaid="_0b927bb6_7666_4bab_9a62_1bb488a2950b" name="Function for R1f_1">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">        
+            <lambda>
+              <bvar>
+                <ci> cell </ci>
+              </bvar>
+              <bvar>
+                <ci> foo </ci>
+              </bvar>
+              <bvar>
+                <ci> bar </ci>
+              </bvar>
+              <apply>
+                <times/>
+                <ci> cell </ci>
+                <ci> foo </ci>
+                <ci> bar </ci>
+              </apply>
+            </lambda>
+          </math>
+        </functionDefinition>
+      </listOfFunctionDefinitions>
   <listOfUnitDefinitions>
     <unitDefinition id="knownUnits">
       <listOfUnits>
@@ -164,13 +187,14 @@
        <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
-              <times/>
+              <ci> function_1 </ci>
               <ci> cell</ci>
               <apply>
               <divide/>
                 <ci> Species1 </ci>
               <ci> k1 </ci>
                 </apply>
+              <ci> 1 </ci>
             </apply>
           </math>
         </kineticLaw>

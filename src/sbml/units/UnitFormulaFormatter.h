@@ -354,6 +354,13 @@ public:
 
   /* @cond doxygenLibsbmlInternal */
   
+  UnitDefinition * getUnitDefinitionFromMath(const ASTNode * node, bool inKL,
+    int reactNo);
+  
+  /** @endcond */
+
+  /* @cond doxygenLibsbmlInternal */
+  
   bool variableCanBeDeterminedFromMath(const ASTNode * node, std::string id);
 
   /** @endcond */

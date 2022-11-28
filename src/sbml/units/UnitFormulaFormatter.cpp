@@ -358,6 +358,43 @@ UnitFormulaFormatter::getUnitDefinition(const ASTNode * node,
   return ud;
 }
 
+UnitDefinition *
+UnitFormulaFormatter::getUnitDefinitionFromMath(const ASTNode * node, bool inKL, int reactNo)
+{
+  if(node->getType() != AST_FUNCTION || node->getName() == NULL)
+  {
+    return NULL;
+  }
+  const FunctionDefinition *fd = model->getFunctionDefinition(node->getName());
+  if (fd == NULL || !fd->isSetMath())
+  {
+    return NULL;
+  }
+
+  unsigned int noBvars = fd->getNumArguments();
+  ASTNode * fdMath;
+
+  if (noBvars == 0)
+  {
+    fdMath = fd->getMath()->getLeftChild()->deepCopy();
+  }
+  else
+  {
+    fdMath = fd->getMath()->getRightChild()->deepCopy();
+  }
+
+  unsigned int nodeCount = 0;
+  for (unsigned int i = 0; i < noBvars; i++)
+  {
+    if (nodeCount < node->getNumChildren())
+      fdMath->replaceArgument(fd->getArgument(i)->getName(), 
+                                        node->getChild(nodeCount));
+    nodeCount++;
+  }
+  UnitDefinition * ud = getUnitDefinition(fdMath, inKL, reactNo);
+  delete fdMath;
+  return ud;
+}
 
 /* @cond doxygenLibsbmlInternal */
 /** 
@@ -377,32 +414,8 @@ UnitFormulaFormatter::getUnitDefinitionFromFunction(const ASTNode * node,
 
   if(node->getType() == AST_FUNCTION)
   {
-    const FunctionDefinition *fd = 
-                               model->getFunctionDefinition(node->getName());
-    if (fd && fd->isSetMath())
-    {
-      noBvars = fd->getNumArguments();
-      if (noBvars == 0)
-      {
-        fdMath = fd->getMath()->getLeftChild()->deepCopy();
-      }
-      else
-      {
-        fdMath = fd->getMath()->getRightChild()->deepCopy();
-      }
-
-	  nodeCount = 0;
-      for (i = 0; i < noBvars; i++)
-      {
-        if (nodeCount < node->getNumChildren())
-          fdMath->replaceArgument(fd->getArgument(i)->getName(), 
-                                            node->getChild(nodeCount));
-		nodeCount++;
-      }
-      ud = getUnitDefinition(fdMath, inKL, reactNo);
-      delete fdMath;
-    }
-    else
+    ud = getUnitDefinitionFromMath(node, inKL, reactNo);
+    if (ud == NULL) 
     {
       try
       {
